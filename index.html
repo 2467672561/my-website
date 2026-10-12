@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>极简 · 个人主页</title>
+  <style>
+    /* 全局重置与字体 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      line-height: 1.5;
+      color: #0f172a;
+    }
+
+    /* 主卡片 —— 玻璃质感 + 柔和阴影 */
+    .card {
+      max-width: 720px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 2.5rem;
+      padding: 2.5rem 2rem;
+      box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 
+        0 35px 60px -15px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+    }
+
+    /* 头像区域 */
+    .avatar-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid white;
+      box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.2);
+      background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 1.25rem;
+      transition: all 0.3s ease;
+    }
+
+    .avatar:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.25);
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #0f172a, #3b82f6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.4rem;
+    }
+
+    .title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #475569;
+      background: #f1f5f9;
+      display: inline-block;
+      padding: 0.35rem 1rem;
+      border-radius: 40px;
+      letter-spacing: 0.3px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(2px);
+    }
+
+    /* 简介描述 */
+    .bio {
+      text-align: center;
+      margin: 1.75rem 0 2rem;
+      color: #334155;
+      font-size: 1.05rem;
+      padding: 0 0.5rem;
+      max-width: 550px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* 社交按钮组 */
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.25rem;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: white;
+      color: #1e293b;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.7rem 1.4rem;
+      border-radius: 60px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      border: 1px solid #e2e8f0;
+      transition: all 0.25s ease;
+      flex: 0 1 auto;
+    }
+
+    .social-link svg {
+      width: 1.1rem;
+      height: 1.1rem;
+      fill: currentColor;
+      transition: transform 0.2s ease;
+    }
+
+    .social-link:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      box-shadow: 0 8px 16px -6px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+      color: #0f172a;
+    }
+
+    .social-link:hover svg {
+      transform: scale(1.1);
+    }
+
+    /* 技能标签 */
+    .section-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, #cbd5e1, transparent);
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-bottom: 2.25rem;
+    }
+
+    .skill-tag {
+      background: #ffffff;
+      padding: 0.45rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #1e293b;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s ease;
+    }
+
+    .skill-tag:hover {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 12px -6px rgba(59, 130, 246, 0.4);
+    }
+
+    /* 作品/项目小网格 */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .project-item {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.25rem 1rem;
+      border: 1px solid #e9eef3;
+      box-shadow: 0 4px 10px -6px rgba(0, 0, 0, 0.05);
+      transition: all 0.25s ease;
+      text-align: center;
+    }
+
+    .project-item:hover {
+      border-color: #b9d0f0;
+      box-shadow: 0 12px 20px -12px rgba(59, 130, 246, 0.25);
+      transform: translateY(-3px);
+      background: #ffffff;
+    }
+
+    .project-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .project-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #0f172a;
+      margin-bottom: 0.25rem;
+    }
+
+    .project-desc {
+      font-size: 0.75rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    /* 页脚 / 版权 */
+    .footer-note {
+      text-align: center;
+      margin-top: 2.25rem;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 1.5rem;
+      letter-spacing: 0.3px;
+    }
+
+    .footer-note span {
+      color: #3b82f6;
+      font-weight: 500;
+    }
+
+    /* 响应式微调 */
+    @media (max-width: 480px) {
+      .card {
+        padding: 1.8rem 1.2rem;
+        border-radius: 2rem;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+      }
+
+      .avatar {
+        width: 90px;
+        height: 90px;
+        font-size: 2.5rem;
+      }
+
+      .social-link {
+        padding: 0.6rem 1.1rem;
+        font-size: 0.85rem;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .skill-tag {
+        font-size: 0.8rem;
+        padding: 0.4rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <!-- 头像 & 姓名区 -->
+    <div class="avatar-section">
+      <div class="avatar" aria-label="头像">✨</div>
+      <h1>枫叶</h1>
+      <div class="title">创意开发者 · 设计师</div>
+    </div>
+
+    <!-- 简短介绍 -->
+    <p class="bio">
+      热爱构建优雅的数字体验。专注于前端开发、交互动效与界面设计，喜欢把想法变成干净、有温度的网页。
+    </p>
+
+    <!-- 社交链接按钮 (使用内联SVG) -->
+    <div class="socials">
+      <a href="#" class="social-link" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.26.82-.58 0-.287-.01-1.05-.015-2.06-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.082-.73.082-.73 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.776.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.123-.3-.535-1.52.117-3.16 0 0 1.008-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.29-1.552 3.297-1.23 3.297-1.23.653 1.64.24 2.86.118 3.16.768.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.62-5.476 5.92.43.37.824 1.102.824 2.22 0 1.602-.015 2.894-.015 3.287 0 .322.216.698.83.578C20.565 21.795 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="#" class="social-link" aria-label="Twitter / X">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Twitter
+      </a>
+      <a href="#" class="social-link" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </a>
+    </div>
+
+    <!-- 技能 / 工具 -->
+    <div class="section-label">技能与工具</div>
+    <div class="skills">
+      <span class="skill-tag">JavaScript</span>
+      <span class="skill-tag">TypeScript</span>
+      <span class="skill-tag">React</span>
+      <span class="skill-tag">Vue</span>
+      <span class="skill-tag">Node.js</span>
+      <span class="skill-tag">Figma</span>
+      <span class="skill-tag">Tailwind</span>
+      <span class="skill-tag">WebGL</span>
+    </div>
+
+    <!-- 精选作品 / 项目 (简单的卡片) -->
+    <div class="section-label">精选作品</div>
+    <div class="projects-grid">
+      <div class="project-item">
+        <span class="project-icon">🌊</span>
+        <div class="project-title">潮汐 · 博客</div>
+        <div class="project-desc">极简主义个人博客，专注于阅读体验</div>
+      </div>
+      <div class="project-item">
+        <span class="project-icon">🎨</span>
+        <div class="project-title">调色板工具</div>
+        <div class="project-desc">在线配色与实时预览的交互工具</div>
+      </div>
+      <div class="project-item">
+        <span class="project-icon">📊</span>
+        <div class="project-title">数据看板</div>
+        <div class="project-desc">可拖拽的可视化仪表盘组件库</div>
+      </div>
+    </div>
+
+    <!-- 页脚小字 -->
+    <div class="footer-note">
+      用心设计 · 由 <span>枫叶</span> 制作 © 2026
+    </div>
+  </main>
+</body>
+</html>
